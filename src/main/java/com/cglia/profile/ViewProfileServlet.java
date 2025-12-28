@@ -13,88 +13,91 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.cglia.dao.DBConnection;
 
 @SuppressWarnings("serial")
 @WebServlet("/viewprofile")
-
 public class ViewProfileServlet extends HttpServlet {
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		PrintWriter pw = res.getWriter();
-		HttpSession session = req.getSession();
-		String email = (String) session.getAttribute("email");
-		try {
-			Connection con = DBConnection.getConnection();
+    private static final Logger logger =
+            LoggerFactory.getLogger(ViewProfileServlet.class);
 
-			PreparedStatement ps = con.prepareStatement("select * from users where email=?");
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
 
-			ps.setString(1, email);
+        logger.info("ViewProfileServlet request started");
 
-			ResultSet ub = ps.executeQuery();
+        PrintWriter pw = res.getWriter();
+        HttpSession session = req.getSession(false);
 
-			if (ub.next()) {
-				pw.println("<html>");
-				pw.println("<head>");
-				pw.println("<style>");
-				pw.println("body {");
-				pw.println("  background-image: url('background.jpg');");
-				pw.println("  background-size: cover;");
-				pw.println("  font-family: Arial, sans-serif;");
-				pw.println("  color: #fff;");
-				pw.println("}");
-				pw.println("h2 {");
-				pw.println("  text-align: center;");
-				pw.println("}");
-				pw.println("table {");
-				pw.println("  width: 50%;");
-				pw.println("  margin: 20px auto;");
-				pw.println("  border: 1px solid #ccc;");
-				pw.println("  border-collapse: collapse;");
-				pw.println("  background-color: #333;");
-				pw.println("}");
-				pw.println("th, td {");
-				pw.println("  padding: 12px;");
-				pw.println("  text-align: center;");
-				pw.println("  border-bottom: 1px solid #ccc;");
-				pw.println("}");
-				pw.println("th {");
-				pw.println("  background-color: #f57c00;");
-				pw.println("}");
-				pw.println("</style>");
-				pw.println("</head>");
-				pw.println("<body>");
-				pw.println("<h2>Profile</h2>");
-				pw.println("<table>");
-				pw.println("<tr>");
-				pw.println("<th>Name</th>");
-				pw.println("<th>Email</th>");
-				pw.println("<th>Password</th>");
-				pw.println("<th>Age</th>");
-				pw.println("<th>MobileNo</th>");
-				pw.println("</tr>");
+        if (session == null) {
+            logger.warn("Session expired or not found");
+            res.sendRedirect("login.html");
+            return;
+        }
 
-				pw.println("<tr>");
-				pw.println("<td>" + ub.getString(1) + "</td>");
-				pw.println("<td>" + ub.getString(2) + "</td>");
-				pw.println("<td>" + ub.getString(3) + "</td>");
-				pw.println("<td>" + ub.getInt(4) + "</td>");
-				pw.println("<td>" + ub.getString(5) + "</td>");
-				pw.println("</tr>");
+        String email = (String) session.getAttribute("email");
+        logger.debug("Email fetched from session: {}", email);
 
-				pw.println("</table>");
-				pw.println("<br>");
-				pw.println("<a href='Home.html'>Back</a>");
-				pw.println("</body>");
-				pw.println("</html>");
+        if (email == null) {
+            logger.warn("Email not found in session");
+            res.sendRedirect("login.html");
+            return;
+        }
 
-			}
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "select * from users where email=?")) {
 
-			con.close();
+            logger.info("Database connection established");
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            ps.setString(1, email);
+            logger.debug("Executing query for email: {}", email);
 
-	}
+            ResultSet ub = ps.executeQuery();
+
+            if (ub.next()) {
+                logger.info("User profile found for email: {}", email);
+
+                pw.println("<html>");
+                pw.println("<head>");
+                pw.println("<style>");
+                pw.println("body { background-image: url('background.jpg'); background-size: cover; font-family: Arial; color: #fff; }");
+                pw.println("h2 { text-align: center; }");
+                pw.println("table { width: 50%; margin: 20px auto; border-collapse: collapse; background-color: #333; }");
+                pw.println("th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ccc; }");
+                pw.println("th { background-color: #f57c00; }");
+                pw.println("</style>");
+                pw.println("</head>");
+                pw.println("<body>");
+                pw.println("<h2>Profile</h2>");
+                pw.println("<table>");
+                pw.println("<tr><th>Name</th><th>Email</th><th>Password</th><th>Age</th><th>MobileNo</th></tr>");
+                pw.println("<tr>");
+                pw.println("<td>" + ub.getString(1) + "</td>");
+                pw.println("<td>" + ub.getString(2) + "</td>");
+                pw.println("<td>" + ub.getString(3) + "</td>");
+                pw.println("<td>" + ub.getInt(4) + "</td>");
+                pw.println("<td>" + ub.getString(5) + "</td>");
+                pw.println("</tr>");
+                pw.println("</table>");
+                pw.println("<br><a href='Home.html'>Back</a>");
+                pw.println("</body></html>");
+
+            } else {
+                logger.warn("No user found for email: {}", email);
+                pw.println("<h3>No profile found</h3>");
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception occurred while fetching user profile", e);
+            throw new ServletException(e);
+        }
+
+        logger.info("ViewProfileServlet request completed");
+    }
 }
