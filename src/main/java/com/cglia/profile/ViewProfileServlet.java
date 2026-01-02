@@ -1,29 +1,24 @@
 package com.cglia.profile;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.cglia.dao.DBConnection;
 
 @SuppressWarnings("serial")
 @WebServlet("/viewprofile")
 public class ViewProfileServlet extends HttpServlet {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(ViewProfileServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ViewProfileServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -101,3 +96,4 @@ public class ViewProfileServlet extends HttpServlet {
         logger.info("ViewProfileServlet request completed");
     }
 }
+
