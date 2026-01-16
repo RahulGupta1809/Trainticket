@@ -22,12 +22,6 @@ public class LogoutServlet  extends HttpServlet {
 	          
 	          HttpSession session=req.getSession();
 	          session.invalidate();
-	        req.getRequestDispatcher("login.html").include(req, res); 
-	           
-		
-		
+	        req.getRequestDispatcher("login.html").include(req, res); 	
 	}
-
 }
-
-
