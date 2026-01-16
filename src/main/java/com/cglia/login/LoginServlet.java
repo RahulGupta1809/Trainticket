@@ -18,8 +18,6 @@ import com.cglia.dao.DBConnection;
 public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
-	
 		PrintWriter out = res.getWriter();
 		HttpSession session=req.getSession();
 			try {
@@ -50,10 +48,5 @@ public class LoginServlet extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
-
-	
 	}
-
 }
-
