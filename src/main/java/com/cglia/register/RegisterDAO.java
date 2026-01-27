@@ -1,9 +1,6 @@
 package com.cglia.register;
 
 import java.sql.*;
-
-
-
 import com.cglia.dao.DBConnection;
 
 public class RegisterDAO {
@@ -26,3 +23,4 @@ public class RegisterDAO {
 		return k;
 	}
 }
+
