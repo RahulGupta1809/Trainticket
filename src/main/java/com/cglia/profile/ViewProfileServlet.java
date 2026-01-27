@@ -96,4 +96,3 @@ public class ViewProfileServlet extends HttpServlet {
         logger.info("ViewProfileServlet request completed");
     }
 }
-
