@@ -67,7 +67,4 @@ private String trainnumber;
 		this.trainnumber = trainnumber;
 	}
 
-
 }
-
-	
