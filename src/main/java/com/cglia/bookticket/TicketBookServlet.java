@@ -17,7 +17,7 @@ import com.cglia.dao.DBConnection;
 
 @SuppressWarnings("serial")
 @WebServlet("/ticketBook")
-	//Servlet
+	//Servlets
 public class TicketBookServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		HttpSession session = req.getSession();
