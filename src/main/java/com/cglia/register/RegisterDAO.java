@@ -2,7 +2,7 @@ package com.cglia.register;
 
 import java.sql.*;
 import com.cglia.dao.DBConnection;
-
+//User Register DAO Class
 public class RegisterDAO {
 	public int k = 0;
 
