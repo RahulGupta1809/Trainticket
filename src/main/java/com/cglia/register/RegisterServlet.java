@@ -3,7 +3,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
-
+//Regiser Servlet
 @SuppressWarnings("serial")
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
