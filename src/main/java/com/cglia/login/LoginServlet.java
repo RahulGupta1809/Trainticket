@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
 				}
 				else
 				{
-//					pw.println("<h2 style=text-align:center;color:green;>Welcome - "+ub.getName()+"</h2><br>");
+				pw.println("<h2 style=text-align:center;color:green;>Welcome - "+ub.getName()+"</h2><br>");
 					session.setAttribute("email",email);
 					RequestDispatcher rd = req.getRequestDispatcher("Home.html");
 					rd.forward(req, res);
